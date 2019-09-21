@@ -28,7 +28,8 @@ class Backend {
      * @input-params this.serverSalt
      * @modify-params this.result
      */
-    this.result = {/* TODO */}
+    this.result.account =this.data.account
+	this.result.password = hmac(this.serverSalt, this.data.newPassword, {alg:'md5', repeat: 1})
   }
 
   checkDatabase(){
@@ -39,7 +40,7 @@ class Backend {
     let res = this.query(this.data.account)
     let checkFlag = false
     if(res != null){
-      checkFlag = null /* TODO */
+      checkFlag = res.password === hmac(this.serverSalt, this.data.password, {alg:'md5', repeat: 1})
     } else {
       // If acount doesn't exist, create a new account
       this.register()
@@ -54,8 +55,8 @@ class Backend {
      */
     let account = this.result.account
 
-    this.store[account].password = null /* TODO */
-    this.store[account].salt = null /* TODO */
+    this.store[account].password = this.result.password
+    this.store[account].salt = this.data.newSalt
   }
 
   query(account){

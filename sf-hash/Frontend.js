@@ -36,8 +36,13 @@ class Frontend {
     /**
      * @input-params this.data
      */
-    this.result = {/* TODO */}
+    this.result.account = this.data.account
+	this.result.password = hmac(this.data.salt,this.data.password,{alg:'sha256',repeat:100})
+	this.result.newSalt = generateSalt(16)
+	this.result.newPassword =hmac(this.result.newSalt,this.data.password,{alg:'sha256',repeat:100})
   }
+  
+  
 
   ajax(target){
     return new Promise(resolve => {
