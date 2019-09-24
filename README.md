@@ -29,7 +29,7 @@
 - `simulator.js`: 快慢加密的流程
 - `test.js`: 单元测试文件
 
-你需要完成`Backend.js`和`Frontend.js`中相应的【TODO】，然后在主目录下，执行(Windows)`CallShell.bat`文件，输入命令行:`npm run sf-test`，当你看到以下内容时，说明你完成了测试：
+你需要完成`Backend.js`和`Frontend.js`中相应的【TODO】，然后在主目录下，执行(Windows)`cmd`，输入命令行:`npm run sf-test`，当你看到以下内容时，说明你完成了测试：
 
 ![](docs/sf-test.jpg)
 
