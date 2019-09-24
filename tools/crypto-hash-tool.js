@@ -5,8 +5,8 @@ const crypto = require('crypto')
  * @param length 随机盐的长度
  * @return {string}
  */
-function generateSalt(length){
-  length = parseInt(length) || 1
+function generateSalt(length) {
+  length = parseInt(length, 10) || 1
 
   if (!Number.isFinite(length)) { // isFinite 判断是否为有限数值
     throw new TypeError('Expected a finite number')
@@ -23,17 +23,18 @@ function generateSalt(length){
  * @param opt 可选参数 { alg:算法，可用列表见下, repeat:重复次数(正整数) }
  * @return {string} 哈希散列
  */
+/* eslint no-param-reassign: 0 */
 function hmac(secretKey, content, opt) {
   opt = opt || {}
-  let repeat = parseInt(opt.repeat)|| 1 // 重复次数，非数字或非正数数会被默认设置为1
+  const repeat = parseInt(opt.repeat, 10) || 1 // 重复次数，非数字或非正数数会被默认设置为1
 
   if (!Number.isFinite(repeat)) { // isFinite 判断是否为有限数值
     throw new TypeError('Expected a finite number')
   }
 
   let hashMsg = content || ''
-  for(let i=0; i<(repeat>0?repeat:1); i++){
-    let hmac = crypto.createHmac(opt.alg || 'md5', ''+(secretKey || ''))
+  for (let i = 0; i < (repeat > 0 ? repeat : 1); i++) {
+    const hmac = crypto.createHmac(opt.alg || 'md5', `${secretKey || ''}`)
     hmac.update(hashMsg)
     hashMsg = hmac.digest('hex')
   }

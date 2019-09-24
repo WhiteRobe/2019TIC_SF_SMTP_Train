@@ -1,3 +1,4 @@
+/* eslint-disable */
 const { generateSalt, hmac } = require('../tools/crypto-hash-tool.js')
 const simulator = require('./simulator.js')
 const formInput = require('./configure.js')
@@ -9,13 +10,13 @@ function checkFrontend(index, frontend){
     process.exit(1)
   }
 
-  assert(`[${index}]Frontend check slow-hash [password]`, 
-    frontend.result.password, 
+  assert(`[${index}]Frontend check slow-hash [password]`,
+    frontend.result.password,
     hmac(frontend.data.salt, frontend.data.password, {alg:'sha256', repeat: 100})
   )
 
-  assert(`[${index}]Frontend check slow-hash [new-password]`, 
-    frontend.result.newPassword, 
+  assert(`[${index}]Frontend check slow-hash [new-password]`,
+    frontend.result.newPassword,
     hmac(frontend.result.newSalt, frontend.data.password, {alg:'sha256', repeat: 100})
   )
 }
@@ -28,13 +29,13 @@ function checkBackend(index, backend){
 
   let res = backend.query(backend.data.account)
 
-  assert(`[${index}]Backend check update [salt]`, 
-    res.salt, 
+  assert(`[${index}]Backend check update [salt]`,
+    res.salt,
     backend.data.newSalt
   )
 
-  assert(`[${index}]Backend check fast-hash/update [password]`, 
-    res.password, 
+  assert(`[${index}]Backend check fast-hash/update [password]`,
+    res.password,
     hmac(backend.serverSalt, backend.data.newPassword, {alg:'md5', repeat: 1})
   )
 
@@ -51,7 +52,7 @@ function assert(tag, a, b){
   try {
     for(let i=0; i<6; i++){
       let entity = await simulator(formInput).catch(err=>{throw err})
-      
+
       checkFrontend(i, entity.frontend)
       checkBackend(i, entity.backend)
 

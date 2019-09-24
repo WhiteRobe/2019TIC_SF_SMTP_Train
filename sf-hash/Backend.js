@@ -1,3 +1,4 @@
+/* eslint-disable */
 const { hmac } = require('../tools/crypto-hash-tool.js')
 
 /**
@@ -28,20 +29,28 @@ class Backend {
      * @input-params this.serverSalt
      * @modify-params this.result
      */
-    this.result = {/* TODO */}
+    this.result = {
+      /* TODO */
+      account: this.data.account,
+      password: hmac(this.serverSalt, this.data.newPassword, { alg:'md5', repeat: 1 })
+    }
   }
 
+  // Step4-0
   checkDatabase(){
     /**
+     * @input-params this.data
      * @input-params this.result
      * @output-params Boolean: (you shold call updateDatabase() if auth-check passed, which is `return true`
      */
     let res = this.query(this.data.account)
     let checkFlag = false
     if(res != null){
-      checkFlag = null /* TODO */
+      /* TODO Auth-check */
+      checkFlag = res.password === hmac(this.serverSalt, this.data.password, { alg: 'md5', repeat: 1 })
     } else {
       // If acount doesn't exist, create a new account
+      // Register(): let password = hmac(this.serverSalt, this.data.password, {alg:'md5', repeat: 1})
       this.register()
       checkFlag = true
     }
@@ -54,8 +63,10 @@ class Backend {
      */
     let account = this.result.account
 
-    this.store[account].password = null /* TODO */
-    this.store[account].salt = null /* TODO */
+    /* TODO */
+    this.store[account].password = this.result.password
+    /* TODO */
+    this.store[account].salt = this.data.newSalt
   }
 
   query(account){
@@ -72,7 +83,7 @@ class Backend {
       account,
       password,
       salt
-    } 
+    }
   }
 
 }

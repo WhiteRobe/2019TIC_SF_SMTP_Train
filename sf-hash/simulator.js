@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Backend = require('./Backend.js')
 const Frontend = require('./Frontend.js')
 const chalk = require('chalk')

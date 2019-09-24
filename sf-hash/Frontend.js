@@ -6,74 +6,63 @@ const { generateSalt, hmac } = require('../tools/crypto-hash-tool.js')
  */
 
 class Frontend {
-  constructor(){
+  constructor() {
     this.data = {
       account: 'account',
       password: 'password',
-      salt: null
+      salt: null,
     }
 
-    this.result = {/* accout:null, password: null, newPassword: null, newSalt:null */} // Result after slow-hash
+    this.result = {
+      /* accout:null, password: null, newPassword: null, newSalt:null */
+    } // Result after slow-hash
   }
 
-  userInput(formInput){
+  userInput(formInput) {
     this.data = formInput
   }
 
-  async getSalt(backend){
-    this.data.salt = await new Promise(resolve => {
+  // Step1
+  async getSalt(backend) {
+    this.data.salt = await new Promise((resolve) => {
       setTimeout(
         () => {
-          let res = backend.query(this.data.account)
+          //  Step2
+          const res = backend.query(this.data.account)
           resolve(res == null ? generateSalt(16) : res.salt)
         },
-        500 /* delay 0.5s */
+        500, /* delay 0.5s */
       )
-    }).catch(err=>{throw err})
+    }).catch((err) => { throw err })
   }
-  
-  slowHash(){
+
+  slowHash() {
     /**
      * @input-params this.data
      */
-    this.result = {/* TODO */}
+    this.result = {
+    /* TODO Step3: slow-1: HPW; slow-2: NH PW */
+      account: this.data.account,
+      password: hmac(this.data.salt, this.data.password, { alg: 'sha256', repeat: 100 }),
+      newSalt: generateSalt(16),
+    }
+    this.result.newPassword = hmac(this.result.newSalt, this.data.password, { alg: 'sha256', repeat: 100 })
   }
 
-  ajax(target){
-    return new Promise(resolve => {
+  ajax(target) {
+    return new Promise((resolve) => {
       setTimeout(
         () => resolve(target.accept(this.result)),
-        500 /* delay 0.5s */
+        500, /* delay 0.5s */
       )
     })
   }
 }
 
-module.exports = Frontend;
-
-
-
-
-
-
-
-
+module.exports = Frontend
 
 
 // ----------------------Answer-----------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
